@@ -23,28 +23,42 @@ window.onload = ()=> {
                     for(const item of errArr){
                         badWords.push(item.bad);
                         betterWords.set(item.bad, item.better);
-                        console.log(typeof(item.bad));
+                        console.log(item.bad+" -> "+typeof(item.bad));
                     }
 
-                    console.log(betterWords);
+                    //console.log(betterWords);
                     document.getElementById('file-content').innerHTML = redContent(contents, badWords);
 
                     let allSpans = document.querySelectorAll("span");
                     allSpans.forEach(span => {
                         span.addEventListener("mouseover", (e)=> {
-                            alert(e.target.textContent);
-                            let arr=betterWords.get(e.target.innerHTML);
-                            // const UL=document.createElement("ul");
-                            // const historyOptions = document.createElement("option");
-                            // historyOptions.setAttribute("value", text);
-                            // var t = document.createTextNode(text);
-                            // historyOptions.appendChild(t);
-                            // document.getElementById("selectHistory").appendChild(historyOptions);
+                            //alert(e.target.textContent);
+                            e.stopImmediatePropagation();
+                            e.preventDefault();
+                            console.log(typeof(e.target.textContent));
+
+                            let arr=betterWords.get(e.target.textContent.trim());
+
+                            var str = '<ul>';
+
+                            arr.forEach(it => {
+                                str += '<li>'+ it +'</li>';
+                            });
+
+                            str += '</ul>';
+
+                            $(e.target).append(str);
 
                             console.log(arr);
-
-                            e.target.innerHTML="Done";
+                            //e.target.innerHTML="Done";
                         });
+
+                        span.addEventListener("mouseout", (e)=>{
+                            //alert(e.target.firstChild.textContent);    
+                            e.target.innerHTML=e.target.firstChild.textContent;
+
+                        });
+
                     });
                 }
             );
